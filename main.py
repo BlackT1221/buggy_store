@@ -24,6 +24,10 @@ class TiendaOnline:
             cant_comprada = item['cantidad']
 
             producto = self.inventario[id_prod]
+
+            # Validamos que haya suficiente stock antes de vender
+            if producto['cantidad'] < cant_comprada:
+                raise ValueError(f"Stock insuficiente para {id_prod}")
             
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
@@ -34,7 +38,7 @@ class TiendaOnline:
             total_pedido = total_pedido * 1.20
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido
         
         return total_pedido
 
@@ -66,10 +70,15 @@ if __name__ == "__main__":
     
     total = tienda1.procesar_pedido(carrito, cupon_descuento="SENA2026")
     print(f"Total del pedido (con descuento): ${total}")
-    
+
+
     # Prueba 3: Comprar más de lo que hay
     carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
-    # tienda1.procesar_pedido(carrito_excesivo) # Descomentar para probar
+    try:
+        tienda1.procesar_pedido(carrito_excesivo)
+        print(" ERROR: no debería permitir comprar más de lo disponible")
+    except ValueError as e:
+        print(f" Validación correcta: {e}")
     
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
