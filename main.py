@@ -24,7 +24,13 @@ class TiendaOnline:
             cant_comprada = item['cantidad']
 
             producto = self.inventario[id_prod]
-            
+
+            # Bug 4: no se validaba el inventario disponible y se permitian
+            # compras superiores al stock, dejando cantidades negativas.
+            if cant_comprada > producto['cantidad']:
+                # Correccion: rechazar el pedido cuando no hay suficiente stock.
+                raise ValueError("Stock insuficiente")
+
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
