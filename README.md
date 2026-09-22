@@ -1,7 +1,6 @@
 Contexto para los estudiantes:
 Acabamos de heredar el backend de una pequeña tienda en línea escrito por un desarrollador Junior. El sistema permite registrar productos, procesar compras y limpiar el inventario. Sin embargo, los clientes se quejan de que los cobros son incorrectos, el inventario se daña y el sistema a veces colapsa. Su misión es encontrar y reparar los 6 bugs mortales escondidos en este código.
 
-
 ## Bugs encontrados y solución
 
 | # | Bug | Archivo | Línea | Descripción del error | Solución |
@@ -12,3 +11,5 @@ Acabamos de heredar el backend de una pequeña tienda en línea escrito por un d
 | 4 | Sin validación de stock disponible | `main.py` | 29 | La línea `producto['cantidad'] -= cant_comprada` restaba directamente del inventario sin verificar antes si había suficiente cantidad disponible. Esto permitía procesar pedidos por más unidades de las que existían en stock, dejando la cantidad en números **negativos** y dañando la integridad del inventario. | Se agregó una validación antes de descontar del inventario: `if producto['cantidad'] < cant_comprada: raise ValueError(f"Stock insuficiente para {id_prod}")`, evitando así que se procesen pedidos con cantidades mayores al stock disponible. |
 | 5 | Producto inexistente | `main.py` | 30    | El sistema no validaba correctamente que el producto solicitado existiera en el inventario antes de procesar el pedido. Esto podía provocar un error al intentar acceder a la información de un producto que no estaba registrado. | Se agregó una validación para comprobar si el producto existe en el inventario antes de acceder a sus datos: `if id_prod not in self.inventario: raise ValueError(...)`. |
 | 6 | Modificar el diccionario mientras se itera | `main.py` | 43-45 | El método `limpiar_agotados` recorría `self.inventario.keys()` directamente mientras eliminaba elementos del mismo diccionario dentro del bucle. En Python, esto genera un `RuntimeError: dictionary changed size during iteration`, ya que no está permitido modificar el tamaño de un diccionario mientras se itera sobre él. | Se cambió `for id_producto in self.inventario.keys():` por `for id_producto in list(self.inventario.keys()):`, creando así una copia fija de las claves antes de iterar, lo que permite eliminar elementos del diccionario original sin generar errores. |
+| 3 | Descuento invertido | `main.py` | 34 | La línea `total_pedido = total_pedido * 1.20` multiplicaba el total por **1.20**, lo cual en realidad **aumenta** el precio un 20% en vez de aplicar un descuento. | Se corrigió a `total_pedido = total_pedido * 0.80`, que sí aplica correctamente un descuento del 20% sobre el total. |
+

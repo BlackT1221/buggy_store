@@ -33,7 +33,7 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
         self.ventas_totales += total_pedido 
@@ -51,15 +51,12 @@ class TiendaOnline:
 if __name__ == "__main__":
     print("Iniciando pruebas del sistema...")
     
-    # Prueba 1: Inicialización
     tienda1 = TiendaOnline()
     tienda1.agregar_producto("P01", "Teclado Mecánico", 150000, 5)
     
     tienda2 = TiendaOnline()
-    # ¿Qué inventario tiene tienda2? 
     print(f"Inventario tienda 2: {tienda2.inventario}")
 
-    # Prueba 2: Procesar un pedido válido
     tienda1.agregar_producto("P02", "Mouse Gamer", 80000, 3)
     carrito = [
         {'id_producto': 'P01', 'cantidad': 2},
@@ -69,10 +66,8 @@ if __name__ == "__main__":
     total = tienda1.procesar_pedido(carrito, cupon_descuento="SENA2026")
     print(f"Total del pedido (con descuento): ${total}")
     
-    # Prueba 3: Comprar más de lo que hay
     carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
     # tienda1.procesar_pedido(carrito_excesivo) # Descomentar para probar
     
-    # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
     # tienda1.limpiar_agotados() # Descomentar para probar
