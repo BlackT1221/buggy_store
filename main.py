@@ -1,6 +1,5 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
-    
     def __init__(self, inventario_inicial={}):
         self.inventario = inventario_inicial
         self.ventas_totales = 0.0
@@ -32,9 +31,12 @@ class TiendaOnline:
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
             total_pedido = total_pedido * 1.20
+            #  bug 3 =  El bug es una letra I mayúscula (totaIes) en vez de una L minúscula, lo que genera un AttributeError.
+            # Antes (con error):
+            # self.ventas_totaIes += total_pedido
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
