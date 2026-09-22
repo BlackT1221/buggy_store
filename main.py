@@ -12,20 +12,39 @@ class TiendaOnline:
         else:
             self.inventario[id_producto] = {'nombre': nombre, 'precio': precio, 'cantidad': cantidad}
 
+
+   
     def procesar_pedido(self, carrito, cupon_descuento=None):
         """
         Procesa una lista de items en el carrito.
         carrito es una lista de diccionarios: [{'id_producto': 'A1', 'cantidad': 2}, ...]
         """
+
         total_pedido = 0.0
 
+        # Validar todos los productos antes de modificar el inventario
+        for item in carrito:
+            id_prod = item['id_producto']
+            cant_comprada = item['cantidad']
+
+            if id_prod not in self.inventario:
+                raise ValueError(f"Producto no encontrado: {id_prod}")
+
+            if cant_comprada <= 0:
+                raise ValueError("La cantidad debe ser mayor que cero")
+
+            producto = self.inventario[id_prod]
+
+            if cant_comprada > producto['cantidad']:
+                raise ValueError("Stock insuficiente")
+
+        # Actualizamos inventario y sumamos al total
         for item in carrito:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
             producto = self.inventario[id_prod]
-            
-            # Actualizamos inventario y sumamos al total
+
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
 
@@ -34,8 +53,8 @@ class TiendaOnline:
             total_pedido = total_pedido * 1.20
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
-        
+        self.ventas_totaIes += total_pedido
+
         return total_pedido
 
     def limpiar_agotados(self):
