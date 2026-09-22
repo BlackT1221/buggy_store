@@ -18,22 +18,26 @@ class TiendaOnline:
         carrito es una lista de diccionarios: [{'id_producto': 'A1', 'cantidad': 2}, ...]
         """
         total_pedido = 0.0
+        cantidades_pedidas = {}
 
+        # Bug 5: validar todo el carrito antes de modificar el inventario.
         for item in carrito:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
             producto = self.inventario[id_prod]
 
-            # Bug 4: no se validaba el inventario disponible y se permitian
-            # compras superiores al stock, dejando cantidades negativas.
-            if cant_comprada > producto['cantidad']:
-                # Correccion: rechazar el pedido cuando no hay suficiente stock.
+            cantidades_pedidas[id_prod] = (
+                cantidades_pedidas.get(id_prod, 0) + cant_comprada
+            )
+            if cantidades_pedidas[id_prod] > producto['cantidad']:
                 raise ValueError("Stock insuficiente")
 
-            # Actualizamos inventario y sumamos al total
-            producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
+
+        # Solo se descuenta el inventario cuando todo el pedido es valido.
+        for id_prod, cantidad in cantidades_pedidas.items():
+            self.inventario[id_prod]['cantidad'] -= cantidad
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
