@@ -26,6 +26,9 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+            if id_prod not in self.inventario:
+                raise ValueError(f"El producto '{id_prod}' no existe en el inventario")
+
             producto = self.inventario[id_prod]
             
             # Actualizamos inventario y sumamos al total
