@@ -25,6 +25,10 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+            # BUG 5: Validar que el producto exista
+            if id_prod not in self.inventario:
+                raise ValueError(f"Producto {id_prod} no existe")
+
             producto = self.inventario[id_prod]
 
             # Validamos que haya suficiente stock antes de vender
