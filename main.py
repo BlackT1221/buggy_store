@@ -5,7 +5,7 @@ class TiendaOnline:
         if inventario_inicial is None:
            inventario_inicial = {}
         self.inventario = inventario_inicial
-        self.ventas_totaIes = 0
+        self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
         """Agrega o actualiza un producto en el inventario."""
