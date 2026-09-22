@@ -34,7 +34,7 @@ class TiendaOnline:
 
             # BUG 5: Validar que el producto exista
             if id_prod not in self.inventario:
-                raise ValueError(f"Producto no encontrado: {id_prod}")
+                raise ValueError(f"Producto {id_prod} no existe")
 
             producto = self.inventario[id_prod]
 
