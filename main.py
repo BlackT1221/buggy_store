@@ -26,6 +26,10 @@ class TiendaOnline:
             cant_comprada = item['cantidad']
 
             producto = self.inventario[id_prod]
+
+            # Validamos que haya suficiente stock antes de vender
+            if producto['cantidad'] < cant_comprada:
+                raise ValueError(f"Stock insuficiente para {id_prod}")
             
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
