@@ -50,7 +50,7 @@ class TiendaOnline:
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+        for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 
@@ -78,4 +78,5 @@ if __name__ == "__main__":
     # tienda1.procesar_pedido(carrito_excesivo) # Descomentar para probar
     
     tienda1.inventario["P01"]["cantidad"] = 0
-    # tienda1.limpiar_agotados() # Descomentar para probar
+    #tienda1.limpiar_agotados() # Descomentar para probar
+    #print(f"Inventario después de limpiar agotados: {tienda1.inventario}")
