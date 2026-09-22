@@ -1,9 +1,9 @@
 """
 Test funcionales para el bug 005 corregido en la rama fix/bug005.
 
-Ejecución:
-    python3 test_bug_005.py
-    python3 -m pytest test_bug_005.py -v
+Ejecución (desde la raíz del repo):
+    python3 tests/test_bug_005.py
+    python3 -m pytest tests/test_bug_005.py -v
 
 Notas:
 - Bug 001 (diccionario mutable compartido): se pasa un dict() nuevo a cada
@@ -12,6 +12,12 @@ Notas:
   inicializa el atributo para que 'procesar_pedido' no lance AttributeError
   durante los tests.
 """
+
+import os
+import sys
+
+# Permite importar main.py esté donde esté el cwd al ejecutar el test
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from main import TiendaOnline
 
