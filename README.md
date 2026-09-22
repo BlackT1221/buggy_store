@@ -32,6 +32,20 @@ tienda2 = TiendaOnline()
 print(tienda2.inventario)
 ```
 
+## Prueba automatizada
+
+Se agregó el archivo `test_bug01_inventory.py` con una prueba basada en `assert`.
+
+La prueba crea dos instancias diferentes de `TiendaOnline`. A la primera se le agrega un producto y luego se verifica automáticamente que la segunda tienda mantenga su inventario vacío.
+
+También se valida que ambas tiendas no compartan el mismo objeto en memoria.
+
+Comando ejecutado:
+
+```bash
+python test_bug01_inventory.py
+```
+
 ## Resultado esperado
 
 La segunda tienda debe iniciar con inventario vacío:
