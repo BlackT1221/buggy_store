@@ -31,10 +31,10 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
@@ -66,6 +66,7 @@ if __name__ == "__main__":
     
     total = tienda1.procesar_pedido(carrito, cupon_descuento="SENA2026")
     print(f"Total del pedido (con descuento): ${total}")
+    print(f"Ventas totales acumuladas: {tienda1.ventas_totales}")
     
     # Prueba 3: Comprar más de lo que hay
     carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
