@@ -1,18 +1,28 @@
+import pytest
 from main import TiendaOnline
 
-# Test del bug 4: no validaba stock disponible
-tienda = TiendaOnline()
-tienda.agregar_producto("P02", "Mouse Gamer", 80000, 3)
 
-# Intentamos comprar más unidades de las que hay en stock
-carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
+def test_stock_insuficiente_lanza_error():
+    """El sistema debe lanzar ValueError si se pide más stock del disponible."""
+    tienda = TiendaOnline(inventario_inicial={})
+    tienda.agregar_producto("P02", "Mouse Gamer", 80000, 3)
 
-try:
-    tienda.procesar_pedido(carrito_excesivo)
-    print("ERROR: el sistema permitió comprar más de lo disponible")
-except ValueError as e:
-    print(f"Bug 4 corregido: {e}")
+    carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
 
-# Confirmamos que el inventario no quedó en negativo
-assert tienda.inventario["P02"]["cantidad"] == 3, "El inventario no debería haber cambiado"
-print("Inventario intacto, la validación funcionó correctamente")
+    with pytest.raises(ValueError):
+        tienda.procesar_pedido(carrito_excesivo)
+
+
+def test_stock_no_cambia_si_falla_la_validacion():
+    """El inventario no debe modificarse si la compra es rechazada por falta de stock."""
+    tienda = TiendaOnline(inventario_inicial={})
+    tienda.agregar_producto("P02", "Mouse Gamer", 80000, 3)
+
+    carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
+
+    try:
+        tienda.procesar_pedido(carrito_excesivo)
+    except ValueError:
+        pass
+
+    assert tienda.inventario["P02"]["cantidad"] == 3
