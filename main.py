@@ -37,12 +37,19 @@ class TiendaOnline:
         self.ventas_totaIes += total_pedido 
         
         return total_pedido
+# bug 6 = este  lo que pasa es que al eliminar elementos de un diccionario mientras se hace un bucle sobre él lanza un RuntimeError
+# Antes (con el error que lanza RuntimeError):
+# def limpiar_agotados(self):
+#     for id_producto in self.inventario.keys():
+#         if self.inventario[id_producto]['cantidad'] <= 0:
+#             del self.inventario[id_producto]
 
-    def limpiar_agotados(self):
-        """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
-            if self.inventario[id_producto]['cantidad'] <= 0:
-                del self.inventario[id_producto]
+# Después (corregido):
+def limpiar_agotados(self):
+    """Elimina del inventario los productos con cantidad 0 o menor."""
+    for id_producto in list(self.inventario.keys()):
+        if self.inventario[id_producto]['cantidad'] <= 0:
+            del self.inventario[id_producto] 
 
 
 # --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) ---
