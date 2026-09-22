@@ -1,7 +1,7 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    # Corrección de Bug 1
+    
     def __init__(self, inventario_inicial={}):
         self.inventario = inventario_inicial
         self.ventas_totales = 0.0
@@ -37,7 +37,7 @@ class TiendaOnline:
             total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido
         
         return total_pedido
 
