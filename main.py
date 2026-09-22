@@ -1,6 +1,7 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
+    # Corrección de Bug 1
     def __init__(self, inventario_inicial={}):
         self.inventario = inventario_inicial
         self.ventas_totales = 0.0
@@ -31,6 +32,8 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
+
+        # Corrección de Bug 3
             total_pedido = total_pedido * 0.80
 
         # Registrar la venta
