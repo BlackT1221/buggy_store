@@ -34,13 +34,13 @@ class TiendaOnline:
             total_pedido = total_pedido * 1.20
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+        for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 
@@ -73,4 +73,5 @@ if __name__ == "__main__":
     
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
-    # tienda1.limpiar_agotados() # Descomentar para probar
+    #tienda1.limpiar_agotados() # Descomentar para probar
+    #print(f"Inventario después de limpiar agotados: {tienda1.inventario}")
