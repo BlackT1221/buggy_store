@@ -29,12 +29,12 @@ class TiendaOnline:
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
 
-        # Aplicar descuento si el cupón es válido (20% de descuento)
+                   # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
