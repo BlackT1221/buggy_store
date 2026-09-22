@@ -31,7 +31,10 @@ class TestLimpiarAgotados(unittest.TestCase):
         self.tienda.inventario.clear()
         self.tienda.agregar_producto("P01", "Teclado", 150000, 0)
         self.tienda.agregar_producto("P02", "Mouse", 80000, 3)
-        self.tienda.agregar_producto("P03", "Monitor", 700000, -2)
+        # Estado "sobre-vendido" (cantidad negativa). Se inserta directamente en
+        # el inventario porque agregar_producto ahora rechaza cantidades
+        # negativas (fix bug06); el escenario bajo prueba es el mismo: P03 <= 0.
+        self.tienda.inventario["P03"] = {"nombre": "Monitor", "precio": 700000, "cantidad": -2}
         self.tienda.agregar_producto("P04", "Auriculares", 120000, 1)
 
     def test_no_lanza_runtime_error(self):
