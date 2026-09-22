@@ -40,12 +40,6 @@ class TiendaOnline:
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        # BUG: se recorría self.inventario.keys() y se eliminaban items con `del`
-        # durante esa misma iteración, por lo que el diccionario cambiaba de
-        # tamaño mientras se recorría y Python lanzaba:
-        #   RuntimeError: dictionary changed size during iteration
-        # FIX: se itera sobre list(self.inventario.keys()) (una copia de las
-        # claves), así el recorrido no se ve afectado al borrar del original.
         for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
@@ -79,5 +73,5 @@ if __name__ == "__main__":
     
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
-    tienda1.limpiar_agotados()  # FIX: itera sobre list(...) para no romper el diccionario
+    tienda1.limpiar_agotados()
     print(f"Inventario tras limpiar agotados: {tienda1.inventario}")
