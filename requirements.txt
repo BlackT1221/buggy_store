@@ -1,0 +1,18 @@
+# buggy_store — dependencias
+#
+# El código en ejecución (main.py) NO tiene dependencias externas: usa solo la
+# biblioteca estándar de Python (>= 3.8).
+#
+# pytest es una dependencia OPCIONAL de desarrollo: sirve para correr los suites
+# basados en funciones (tests/test_bug_002.py, tests/test_bug_005.py y
+# tests/test_funcionales.py) con `python3 -m pytest tests/ -v`.
+# Cada uno de esos suites también trae su propio runner, que NO necesita pytest:
+#   python3 tests/test_bug_002.py
+#   python3 tests/test_bug_005.py
+#   python3 tests/test_funcionales.py
+# Los bugs 01, 04 y 06 usan unittest (incluido en la stdlib):
+#   python3 -m unittest discover -s tests -v
+#
+# Instalar (solo si quieres la vía pytest):
+#   pip install -r requirements.txt
+pytest>=7.0

@@ -64,6 +64,11 @@ python3 tests/test_bug_005.py
 
 Resultado esperado: **31/31 en verde.**
 
+> **Dependencias:** ninguna obligatoria — todo lo anterior corre con la
+> biblioteca estándar de Python. `requirements.txt` lista únicamente **pytest**
+> como *opcional* (para correr los suites con `python3 -m pytest tests/ -v`);
+> instálalo con `pip install -r requirements.txt` solo si prefieres esa vía.
+
 ---
 
 # Detalle de cada bug
