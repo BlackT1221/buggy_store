@@ -1,9 +1,11 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
-        self.ventas_totales = 0.0
+    # BUG 1: El argumento por defecto {} es mutable y se comparte entre todas las instancias.
+    
+    def __init__(self, inventario_inicial=None):
+    self.inventario = inventario_inicial if inventario_inicial is not None else {}
+    self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
         """Agrega o actualiza un producto en el inventario."""
@@ -31,10 +33,12 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            
+            # BUG 3: Se multiplicaba por 1.20 (aumento) en vez de 0.80 (descuento del 20%).
+         total_pedido = total_pedido * 0.80 
 
-        # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        # BUG 2: Typo en el nombre de la variable (totaIes con I mayuscula). Causaba un AttributeError.
+         self.ventas_totales += total_pedido
         
         return total_pedido
 
