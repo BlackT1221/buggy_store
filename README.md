@@ -40,16 +40,14 @@ pytest tests/pytest_01.py
 Y debe dar como resultado:
 
 ```ps1
-================================================= test session starts ==================================================
 platform win32 -- Python 3.13.2, pytest-9.1.1, pluggy-1.6.0
 rootdir: C:\Users\user\Downloads\buggy_store
 collected 4 items
 
 tests\pytest_01.py ....                                                                                           [100%]
 
-================================================== 4 passed in 0.03s ===================================================
 ```
-
+---
 # Reporte de Bug 02: Corrección en el cálculo de descuento (Cupón SENA2026)
 
 ## Descripción del problema
@@ -81,12 +79,89 @@ if cupon_descuento == "SENA2026":
 En la carpeta test/ se encuentra un archivo pytest con 2 pruebas funcionales para validar que procesar pedido muestre el valor correcto con y sin cupón.
 
 ```ps1
-============================================================= test session starts =============================================================
 platform win32 -- Python 3.14.5, pytest-9.1.1, pluggy-1.6.0
 rootdir: C:\Users\Nicolas\OneDrive\Documentos\ADSO\cristian\buggy_store
 collected 2 items                                                                                                                              
 
 test\pytest_02.py ..                                                                                                                     [100%]
 
-============================================================== 2 passed in 0.05s ==============================================================
+```
+---
+# ERROR 3 — Inventario compartido entre diferentes tiendas
+##  ¿Cuál es el error?
+
+El error se encuentra en el constructor de la clase TiendaOnline:
+
+
+def __init__(self, inventario_inicial={}):
+    self.inventario = inventario_inicial
+
+El problema está en utilizar:
+
+``
+inventario_inicial={}
+``
+
+
+El mismo código crea dos tiendas:
+
+
+
+```
+tienda1 = TiendaOnline()
+tianda1.agregar_producto("P01", "Teclado Mecánico", 150000, 5)
+
+tianda2 = TiendaOnline()
+```
+
+y posteriormente pregunta:
+
+```
+print(f"Inventario tienda 2: {tienda2.inventario}")
+```
+Esto está colocado intencionalmente en el código para detectar el problema.
+
+### ¿Qué debería ocurrir?
+
+La tienda1 debería tener:
+
+P01 → Teclado Mecánico → 5 unidades
+
+mientras que tienda2, al crearse sin productos, debería tener:
+
+```
+{}
+```
+
+Una tienda no debería recibir automáticamente los productos agregados a otra.
+
+##  ¿Cómo se arregla?
+
+Se debe evitar el diccionario {} como valor predeterminado y utilizar None:
+
+```
+def __init__(self, inventario_inicial=None):
+    self.inventario = (
+        inventario_inicial
+        if inventario_inicial is not None
+        else {}
+    )
+    self.ventas_totales = 0.0
+```
+Así, cuando se crea una nueva tienda sin inventario, se genera un diccionario independiente.
+
+## 3. ¿Cómo se verifica?
+
+Se debe crear una prueba donde:
+
+- Se cree una primera tienda.
+- Se agregue un producto.
+- Se cree una segunda tienda.
+- Se compruebe que la segunda tienda no tiene el producto de la primera.
+
+El resultado esperado es:
+
+```
+Tienda 1 → tiene P01
+Tienda 2 → no tiene P01
 ```
