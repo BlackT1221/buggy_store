@@ -35,8 +35,8 @@ class TiendaOnline:
         if cupon_descuento == "SENA2026":
             total_pedido = total_pedido * 1.20
 
-        # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        # BUG 2: Typo en el nombre de la variable (totaIes con I mayuscula). Causaba un AttributeError.
+         self.ventas_totales += total_pedido
         
         return total_pedido
 
