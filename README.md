@@ -1,2 +1,8 @@
-Contexto para los estudiantes:
-Acabamos de heredar el backend de una pequeña tienda en línea escrito por un desarrollador Junior. El sistema permite registrar productos, procesar compras y limpiar el inventario. Sin embargo, los clientes se quejan de que los cobros son incorrectos, el inventario se daña y el sistema a veces colapsa. Su misión es encontrar y reparar los 6 bugs mortales escondidos en este código.
+# Explicación del error
+
+En el método procesar_pedido se resta directamente la cantidad solicitada del inventario sin verificar si hay suficiente stock.
+Esto permite que un cliente compre más unidades de las que realmente existen. Como resultado, la cantidad del producto puede quedar en negativo, lo cual no tiene sentido en un sistema de inventario real.
+
+- El inventario puede quedar con valores negativos.
+- Se generan ventas de productos que no existen.
+- Se rompe la integridad de los datos del sistema.
