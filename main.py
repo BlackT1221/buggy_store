@@ -40,7 +40,8 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            descuento = total_pedido * 0.20
+            total_pedido = total_pedido - descuento
 
         # Registrar la venta
         self.ventas_totales += total_pedido 
