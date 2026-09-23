@@ -1,2 +1,11 @@
-Contexto para los estudiantes:
-Acabamos de heredar el backend de una pequeña tienda en línea escrito por un desarrollador Junior. El sistema permite registrar productos, procesar compras y limpiar el inventario. Sin embargo, los clientes se quejan de que los cobros son incorrectos, el inventario se daña y el sistema a veces colapsa. Su misión es encontrar y reparar los 6 bugs mortales escondidos en este código.
+Explicación del Bug 2 :
+En el constructor se crea el atributo correcto:
+Pythonself.ventas_totales = 0.0   # con "l" minúscula
+Pero al registrar la venta se escribió:
+Pythonself.ventas_totaIes += total_pedido   # con "I" mayúscula
+Python distingue mayúsculas de minúsculas, así que ventas_totaIes es un nombre totalmente diferente.
+
+Como ese atributo no existía, Python lo crea en el momento y le guarda el valor.
+Resultado: el contador real (ventas_totales) nunca se actualiza y siempre se queda en 0.
+Corrección:
+Pythonself.ventas_totales += total_pedido
