@@ -1,2 +1,23 @@
-Contexto para los estudiantes:
-Acabamos de heredar el backend de una pequeña tienda en línea escrito por un desarrollador Junior. El sistema permite registrar productos, procesar compras y limpiar el inventario. Sin embargo, los clientes se quejan de que los cobros son incorrectos, el inventario se daña y el sistema a veces colapsa. Su misión es encontrar y reparar los 6 bugs mortales escondidos en este código.
+# Corrección de errores — TiendaOnline
+
+## BUG-01 — Inventario compartido entre tiendas
+
+### Ubicación del error
+
+**Líneas 4 y 5** del código original:
+
+### ¿Cuál era el problema?
+
+El diccionario `{}` usado como valor por defecto se podía compartir entre diferentes objetos de la clase `TiendaOnline`.
+
+Esto provocaba que, al agregar un producto a una tienda, ese producto también pudiera aparecer en el inventario de otra tienda nueva.
+
+### Solución
+
+Se cambió el valor por defecto `{}` por `None` y se creó un diccionario nuevo dentro del constructor:
+
+### ¿Por qué funciona?
+
+Al usar `None`, cada vez que se crea una tienda sin inventario se genera un **diccionario nuevo e independiente**.
+
+De esta manera, cada tienda mantiene su propio inventario y los productos de una tienda no afectan a otra.

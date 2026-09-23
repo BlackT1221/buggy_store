@@ -1,7 +1,14 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
+    #Error: Se usaba {} como valor por defecto, haciendo que varias tiendas -
+    #pudieran compartir el mismo inventario.
+    #Solución: Se cambió {} por None y se creó un diccionario nuevo dentro de __init__.
+    
+    def __init__(self, inventario_inicial=None):
+        if inventario_inicial is None:
+            inventario_inicial = {}
+
         self.inventario = inventario_inicial
         self.ventas_totales = 0.0
 
