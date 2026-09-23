@@ -1,23 +1,12 @@
-# Corrección de errores — TiendaOnline
+## 02 - Descuento del cupón
 
-## BUG-01 — Inventario compartido entre tiendas
-
-### Ubicación del error
-
-**Líneas 4 y 5** del código original:
-
-### ¿Cuál era el problema?
-
-El diccionario `{}` usado como valor por defecto se podía compartir entre diferentes objetos de la clase `TiendaOnline`.
-
-Esto provocaba que, al agregar un producto a una tienda, ese producto también pudiera aparecer en el inventario de otra tienda nueva.
+### Error
+El descuento del 20% estaba mal aplicado porque el total se multiplicaba por `1.20`, aumentando el precio en lugar de disminuirlo.
 
 ### Solución
+Se cambió `1.20` por `0.80`, para aplicar correctamente el descuento del 20%.
 
-Se cambió el valor por defecto `{}` por `None` y se creó un diccionario nuevo dentro del constructor:
-
-### ¿Por qué funciona?
-
-Al usar `None`, cada vez que se crea una tienda sin inventario se genera un **diccionario nuevo e independiente**.
-
-De esta manera, cada tienda mantiene su propio inventario y los productos de una tienda no afectan a otra.
+### Cambio realizado
+```python
+if cupon_descuento == "SENA2026":
+    total_pedido = total_pedido * 0.80
