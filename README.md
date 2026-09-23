@@ -1,23 +1,47 @@
+# Corrección de errores — TiendaOnline
+
 Contexto para los estudiantes:
+
 Acabamos de heredar el backend de una pequeña tienda en línea escrito por un desarrollador Junior. El sistema permite registrar productos, procesar compras y limpiar el inventario. Sin embargo, los clientes se quejan de que los cobros son incorrectos, el inventario se daña y el sistema a veces colapsa. Su misión es encontrar y reparar los 6 bugs mortales escondidos en este código.
 
-## Error 04: ventas totales
+## Bug 01: inventario compartido entre tiendas
 
-El atributo se declaraba como `self.ventas_totales = 0.0`, pero en `procesar_pedido` se escribía `ventas_totaIes` (con I mayúscula).
+### Problema
 
-### Corrección
+El diccionario `{}` se usaba como valor por defecto en el constructor. Esto hacía que varias tiendas pudieran compartir el mismo inventario.
 
-Se cambió la I mayúscula por la l:
+### Solución
+
+Se cambió el valor por defecto por `None` y se creó un diccionario nuevo dentro del constructor:
 
 ```python
-self.ventas_totales += total_pedido
+def __init__(self, inventario_inicial=None):
+    if inventario_inicial is None:
+        inventario_inicial = {}
+```
+
+De esta manera, cada tienda mantiene su propio inventario y los productos de una tienda no afectan a otra.
+
+## Bug 02: descuento del cupón
+
+### Problema
+
+El descuento del 20% estaba mal aplicado porque el total se multiplicaba por `1.20`, aumentando el precio en lugar de disminuirlo.
+
+### Solución
+
+Se cambió `1.20` por `0.80` para aplicar correctamente el descuento:
+
+```python
+if cupon_descuento == "SENA2026":
+    total_pedido = total_pedido * 0.80
 ```
 
 ## Bug 03: sobreventa de productos
 
 ### Problema
 
-En el método `procesar_pedido`, se descontaba la cantidad comprada del inventario sin verificar que la cantidad solicitada fuera válida ni que hubiera stock suficiente. Esto permitía vender más unidades de las disponibles y dejaba el inventario en valores negativos.
+En `procesar_pedido` se descontaba la cantidad comprada sin verificar que fuera válida ni que hubiera stock suficiente. Esto permitía vender más unidades de las disponibles y dejaba valores negativos en el inventario.
 
 ### Solución aplicada
 
@@ -25,8 +49,6 @@ Se agregaron validaciones antes de descontar inventario:
 - si la cantidad pedida es menor o igual a 0, se lanza un error
 - si la cantidad pedida supera la cantidad disponible, se lanza un error
 - solo si la compra es válida, se descuenta el stock y se calcula el total
-
-### Bloque corregido
 
 ```python
 for item in carrito:
@@ -44,6 +66,18 @@ for item in carrito:
     total_pedido += producto['precio'] * cant_comprada
 ```
 
-### Resultado
-
 El sistema ya no permite ventas inválidas ni sobreventa, manteniendo el inventario consistente y evitando cobros incorrectos.
+
+## Bug 04: ventas totales
+
+### Problema
+
+El atributo se declaraba como `self.ventas_totales = 0.0`, pero en `procesar_pedido` se escribía `ventas_totaIes`, con I mayúscula.
+
+### Solución
+
+Se corrigió el nombre del atributo:
+
+```python
+self.ventas_totales += total_pedido
+```
