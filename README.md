@@ -6,3 +6,9 @@ Acabamos de heredar el backend de una pequeña tienda en línea escrito por un d
 ## Error del 20% de descuento
  
  En la linea 34 del codigo hay en error en el 20% de descuento ya que se estaba incluyendo con 1.20 y no con 0.80, es decir en vez de disminuir se estaba aumentando el precio
+
+## Error del inventario que no se actualizaba 
+
+Lo que pasa es que Python lee ese {} una sola vez cuando arranca el programa, no cada vez que se crea una tienda. Si la Tienda 1 mete un teclado, la Tienda 2 lo ve porque ambos estan compartiendo el mismo inventario. 
+
+Al usar `None` por defecto, en vez de usar un objeto mutable, aseguro que la creacion del diccionario `self.inventario = {}` ocurra dentro del método, garantizando que cada objeto de la clase tenga su propia estructura de datos independiente.
