@@ -23,6 +23,13 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+# ERROR: Se busca el producto directamente sin verificar si existe en el inventario.
+# Si el ID no está, Python lanza un KeyError y el sistema colapsa.
+# SOLUCIÓN: Validar primero con 'if id_prod not in self.inventario' y lanzar un ValueError controlado.
+
+            if id_prod not in self.inventario:
+                raise ValueError(f"El producto {id_prod} no existe en el inventario")
+                
             producto = self.inventario[id_prod]
 
             # --- CORRECCIÓN BUG 4: Validación de stock insuficiente ---
@@ -45,7 +52,11 @@ class TiendaOnline:
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+
+# ERROR: No se puede modificar el diccionario mientras se itera sobre él.
+# Esto lanza un RuntimeError y colapsa el sistema. Se debe iterar sobre una copia.
+# SOLUCIÓN: Recorrer una copia de las llaves usando list().
+        for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 
