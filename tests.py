@@ -37,3 +37,11 @@ def test_procesar_pedido_descuento_20():
     carrito = [{'id_producto': 'P01', 'cantidad': 1}]
     total = tienda.procesar_pedido(carrito, cupon_descuento="SENA2026")
     assert total == 80000, f"se esperaba 80000, pero el sistema cobró {total}"
+
+def test_procesar_pedido_producto_invalido():
+    tienda = TiendaOnline()
+    tienda.agregar_producto("P01", "Teclado", 100000, 5)
+    carrito = [{'id_producto': 'P02', 'cantidad': 1}]  # Producto no existente
+    tienda.procesar_pedido(carrito)
+
+    assert carrito[0]['id_producto'] in tienda.inventario, f"¡Error detectado! Se procesó un pedido con un producto no existente en el inventario."

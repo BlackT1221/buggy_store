@@ -23,16 +23,19 @@ class TiendaOnline:
         total_pedido = 0.0
 
         for item in carrito:
-            id_prod = item['id_producto']
-            cant_comprada = item['cantidad']
+            if(item['id_producto'] not in self.inventario):
+                return "Error: Producto no encontrado en inventario"
+            else:
+                id_prod = item['id_producto']
+                cant_comprada = item['cantidad']
 
-            producto = self.inventario[id_prod]
+                producto = self.inventario[id_prod]
             
             # Actualizamos inventario y sumamos al total
 
             if cant_comprada > producto['cantidad']:
                  total_pedido = 0.0
-                 return total_pedido
+                 return     "Error: Stock insuficiente para el producto "
             else:
                 producto['cantidad'] -= cant_comprada
                 total_pedido += producto['precio'] * cant_comprada
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     # Prueba 2: Procesar un pedido válido
     tienda1.agregar_producto("P02", "Mouse Gamer", 80000, 3)
     carrito = [
-        {'id_producto': 'P01', 'cantidad': 7},
+        {'id_producto': 'P01', 'cantidad': 2},
         {'id_producto': 'P02', 'cantidad': 1}
     ]
     
