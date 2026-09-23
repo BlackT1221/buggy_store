@@ -1,8 +1,8 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
+    def __init__(self, inventario_inicial=None):
+        self.inventario = inventario_inicial if inventario_inicial is not None else {}
         self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
@@ -18,29 +18,37 @@ class TiendaOnline:
         carrito es una lista de diccionarios: [{'id_producto': 'A1', 'cantidad': 2}, ...]
         """
         total_pedido = 0.0
-
         for item in carrito:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+            if id_prod not in self.inventario:
+                raise ValueError(f"Producto no encontrado: {id_prod}")
+
+            if cant_comprada <= 0:
+                raise ValueError("La cantidad debe ser mayor que cero")
+
             producto = self.inventario[id_prod]
-            
+
+            if cant_comprada > producto['cantidad']:
+                raise ValueError("Stock insuficiente")
+
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+        for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 
@@ -66,6 +74,7 @@ if __name__ == "__main__":
     
     total = tienda1.procesar_pedido(carrito, cupon_descuento="SENA2026")
     print(f"Total del pedido (con descuento): ${total}")
+    print(f"Ventas totales acumuladas: {tienda1.ventas_totales}")
     
     # Prueba 3: Comprar más de lo que hay
     carrito_excesivo = [{'id_producto': 'P02', 'cantidad': 10}]
@@ -73,4 +82,5 @@ if __name__ == "__main__":
     
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
-    # tienda1.limpiar_agotados() # Descomentar para probar
+    tienda1.limpiar_agotados()
+    print(f"Inventario tras limpiar agotados: {tienda1.inventario}")
