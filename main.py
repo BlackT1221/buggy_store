@@ -34,6 +34,10 @@ class TiendaOnline:
             total_pedido = total_pedido * 1.20
 
         # Registrar la venta
+        # ERROR: Se escribio "ventas_totaIes" con "I" mayuscula, pero en el __init__
+        # el atributo se llama "ventas_totales" con "l" minuscula. Python no encontraba
+        # el atributo y el sistema colapsaba con AttributeError.
+        # CORREGIDO: Se cambio la "I" por "l" para que coincida con el __init__
         self.ventas_totales += total_pedido 
         
         return total_pedido
