@@ -60,7 +60,9 @@ class TiendaOnline:
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+        # BUG-06: recorrer una copia de las claves evita que la eliminación
+        # modifique el diccionario mientras el iterador está activo.
+        for id_producto in list(self.inventario):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 

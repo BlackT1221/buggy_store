@@ -100,3 +100,21 @@ for item in carrito:
 ```
 
 Como la validación termina antes de procesar el pedido, un producto desconocido ya no deja cambios parciales en el inventario. La corrección está cubierta por `tests/test_bug_05.py`.
+
+## Bug 06: eliminación durante la iteración del inventario
+
+### Problema
+
+El método `limpiar_agotados` recorría el inventario con `self.inventario.keys()` y eliminaba productos agotados del mismo diccionario durante ese recorrido. Como `keys()` devuelve una vista dinámica, cambiar el tamaño del diccionario lanzaba un `RuntimeError` y podía interrumpir la limpieza.
+
+### Solución
+
+Se crea una copia de las claves con `list(self.inventario)` y se recorre esa copia:
+
+```python
+for id_producto in list(self.inventario):
+    if self.inventario[id_producto]['cantidad'] <= 0:
+        del self.inventario[id_producto]
+```
+
+Así se pueden eliminar todos los productos agotados sin modificar la colección que está iterándose. La corrección está cubierta por `tests/test_bug_06.py`.
