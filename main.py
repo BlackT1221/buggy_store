@@ -40,7 +40,11 @@ class TiendaOnline:
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+
+# ERROR: No se puede modificar el diccionario mientras se itera sobre él.
+# Esto lanza un RuntimeError y colapsa el sistema. Se debe iterar sobre una copia.
+# SOLUCIÓN: Recorrer una copia de las llaves usando list().
+        for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 
