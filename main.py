@@ -1,8 +1,8 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
+    def __init__(self, inventario_inicial=None):
+        self.inventario = {} if inventario_inicial is None else dict(inventario_inicial)
         self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
@@ -24,18 +24,23 @@ class TiendaOnline:
             cant_comprada = item['cantidad']
 
             producto = self.inventario[id_prod]
-            
+
+            # --- CORRECCIÓN BUG 4: Validación de stock insuficiente ---
+            if cant_comprada > producto['cantidad']:
+                raise ValueError(f"No hay suficiente stock para el producto {producto['nombre']}")
+
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
 
-        # Aplicar descuento si el cupón es válido (20% de descuento)
+        # --- CORRECCIÓN BUG 3: Descuento correcto ---
+        # (Corrección: Se cambió de 1.20 a 0.80 para descontar el 20%)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
-        # Registrar la venta
-        self.ventas_totaIes += total_pedido 
-        
+        # Registrar la venta (se corrigió la letra 'I' mayúscula a 'l' minúscula)
+        self.ventas_totales += total_pedido 
+
         return total_pedido
 
     def limpiar_agotados(self):
