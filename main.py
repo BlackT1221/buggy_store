@@ -12,7 +12,7 @@ class TiendaOnline:
         else:
             self.inventario[id_producto] = {'nombre': nombre, 'precio': precio, 'cantidad': cantidad}
 
-    def procesar_pedido(self, carrito, cupon_descuento=None):
+        def procesar_pedido(self, carrito, cupon_descuento=None):
         """
         Procesa una lista de items en el carrito.
         carrito es una lista de diccionarios: [{'id_producto': 'A1', 'cantidad': 2}, ...]
@@ -23,12 +23,19 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+            # BUG 6: No se validaba si el producto existia en el inventario.
+            if id_prod not in self.inventario:
+                raise KeyError(f"El producto con ID {id_prod} no existe.")
+                
             producto = self.inventario[id_prod]
             
+            # BUG 5: No se validaba si había suficiente inventario antes de restar.
+            if producto['cantidad'] < cant_comprada:
+                raise ValueError(f"No hay suficiente inventario para {producto['nombre']}")
+                
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
-
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
             total_pedido = total_pedido * 1.20
