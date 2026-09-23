@@ -1,4 +1,4 @@
-# ERROR 1 — Inventario compartido entre diferentes tiendas
+# ERROR 3 — Inventario compartido entre diferentes tiendas
 ##  ¿Cuál es el error?
 
 El error se encuentra en el constructor de la clase TiendaOnline:
