@@ -1,3 +1,4 @@
+
 # Bug 4 – No valida si el producto existe
 
 ## ¿Dónde está?
@@ -26,3 +27,12 @@ Así el error es controlado y el mensaje dice exactamente qué producto falló.
 ## Prueba unitaria
 `test_bug4_producto_inexistente.py` verifica que al pedir un producto que no
 existe se lanza `ValueError`.
+=======
+# Explicación del error
+
+En el método procesar_pedido se resta directamente la cantidad solicitada del inventario sin verificar si hay suficiente stock.
+Esto permite que un cliente compre más unidades de las que realmente existen. Como resultado, la cantidad del producto puede quedar en negativo, lo cual no tiene sentido en un sistema de inventario real.
+
+- El inventario puede quedar con valores negativos.
+- Se generan ventas de productos que no existen.
+- Se rompe la integridad de los datos del sistema.
