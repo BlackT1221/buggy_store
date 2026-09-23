@@ -18,3 +18,7 @@ Al usar `None` por defecto, en vez de usar un objeto mutable, aseguro que la cre
 El sistema original realizaba el descuento del inventario de forma directa mediante un operador de asignación (-=), restando la cantidad solicitada por el usuario sin verificar previamente si el almacén disponía de suficientes unidades. Esto provocaba un fallo de lógica de negocio donde el inventario quedaba en números negativos.
 
 Se incorporó una estructura de control condicional (if-else) para evaluar si la cantidad comprada es menor o igual al stock actual. De esta forma, la transacción y el descuento solo se ejecutan si hay disponibilidad física; de lo contrario, se rechaza la operación notificando la falta de stock.
+
+## Error tipográfico (Typo) en un atributo de clase
+
+Se corrigio en el constructor se inicializa self.ventas_totales con una 'l' minúscula, pero al registrar la venta se usa una 'I' Esto generará un error de tipo AttributeError al intentar procesar un pedido 
