@@ -23,7 +23,10 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
-            producto = self.inventario[id_prod]
+            if id_prod not in self.inventario:
+                raise ValueError(f"Producto {id_prod} no encontrado en inventario.")
+            else:
+                producto = self.inventario[id_prod]
             
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
@@ -34,7 +37,7 @@ class TiendaOnline:
             total_pedido = total_pedido * 1.20
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido
         
         return total_pedido
 
