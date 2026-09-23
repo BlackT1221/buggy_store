@@ -1,0 +1,5 @@
+git ignore 
+.venv/
+.pytest_cache/
+_pycache_/
+tests/_pycache_/
