@@ -1,8 +1,15 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
+    #def __init__(self, inventario_inicial={}):
+    #self.inventario = inventario_inicial
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
+    # solucion del problema de inventario que no aparecia actualizado
+    def __init__(self, inventario_inicial = None):
+        if inventario_inicial is None:
+            self.inventario = {}
+        else:
+            self.inventario = inventario_inicial
+
         self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
@@ -31,7 +38,7 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 0.80 # Aplicar 20% de descuento 
+            total_pedido = total_pedido * 1.20
 
         # Registrar la venta
         self.ventas_totaIes += total_pedido 
