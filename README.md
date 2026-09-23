@@ -81,3 +81,22 @@ Se corrigió el nombre del atributo:
 ```python
 self.ventas_totales += total_pedido
 ```
+
+## Bug 05: producto inexistente en el carrito
+
+### Problema
+
+El método `procesar_pedido` buscaba cada producto mediante `self.inventario[id_prod]`. Si el identificador no existía, Python lanzaba un `KeyError`. Además, si más adelante aparecía un producto inexistente, el inventario podía quedar modificado parcialmente.
+
+### Solución
+
+Antes de descontar existencias o calcular el total, se recorre el carrito para comprobar que todos los identificadores existan. Si alguno no existe, se lanza un `ValueError` con el identificador recibido:
+
+```python
+for item in carrito:
+    id_prod = item['id_producto']
+    if id_prod not in self.inventario:
+        raise ValueError(f"Producto no encontrado: {id_prod}")
+```
+
+Como la validación termina antes de procesar el pedido, un producto desconocido ya no deja cambios parciales en el inventario. La corrección está cubierta por `tests/test_bug_05.py`.

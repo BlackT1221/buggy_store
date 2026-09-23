@@ -26,6 +26,14 @@ class TiendaOnline:
         """
         total_pedido = 0.0
 
+        # BUG-05: antes de descontar existencias, verificar que todos los IDs
+        # existan. Así un producto inválido no provoca un KeyError tardío ni
+        # deja cambios parciales en el inventario.
+        for item in carrito:
+            id_prod = item['id_producto']
+            if id_prod not in self.inventario:
+                raise ValueError(f"Producto no encontrado: {id_prod}")
+
         for item in carrito:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
