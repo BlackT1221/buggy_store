@@ -42,7 +42,7 @@ class TiendaOnline:
         if cupon_descuento == "SENA2026":
             total_pedido = total_pedido * 0.80
 
-        # BUG 2: Typo en el nombre de la variable (totaIes con I mayuscula).
+        # BUG 2: Typo en el nombre de la variable (totaIes con I mayuscula). Causaba un AttributeError.
         self.ventas_totales += total_pedido 
         
         return total_pedido
@@ -56,7 +56,7 @@ class TiendaOnline:
                 del self.inventario[id_producto]
 
 
-# --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) ---
+# --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) 
 if __name__ == "__main__":
     print("Iniciando pruebas del sistema...")
     
