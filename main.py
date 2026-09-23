@@ -1,9 +1,12 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
+def __init__(self, inventario_inicial=None):
+    if inventario_inicial is None:
+        self.inventario = {}
+    else:
         self.inventario = inventario_inicial
-        self.ventas_totales = 0.0
+    self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
         """Agrega o actualiza un producto en el inventario."""
@@ -38,18 +41,21 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+                # Registrar la venta
+        self.ventas_totales += total_pedido
         
         return total_pedido
-
-    def limpiar_agotados(self):
-        """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
-            if self.inventario[id_producto]['cantidad'] <= 0:
-                del self.inventario[id_producto]
+        
+def limpiar_agotados(self):
+    ids_a_eliminar = [
+        id_producto for id_producto, datos in self.inventario.items()
+        if datos['cantidad'] <= 0
+    ]
+    for id_producto in ids_a_eliminar:
+        del self.inventario[id_producto]    
 
 
 # --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) ---
