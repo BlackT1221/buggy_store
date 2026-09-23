@@ -29,8 +29,14 @@ class TiendaOnline:
             producto = self.inventario[id_prod]
             
             # Actualizamos inventario y sumamos al total
-            producto['cantidad'] -= cant_comprada
-            total_pedido += producto['precio'] * cant_comprada
+
+            if cant_comprada > producto['cantidad']:
+                 total_pedido = 0.0
+                 return total_pedido
+            else:
+                producto['cantidad'] -= cant_comprada
+                total_pedido += producto['precio'] * cant_comprada
+
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
@@ -63,7 +69,7 @@ if __name__ == "__main__":
     # Prueba 2: Procesar un pedido válido
     tienda1.agregar_producto("P02", "Mouse Gamer", 80000, 3)
     carrito = [
-        {'id_producto': 'P01', 'cantidad': 2},
+        {'id_producto': 'P01', 'cantidad': 7},
         {'id_producto': 'P02', 'cantidad': 1}
     ]
     
