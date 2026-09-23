@@ -1,27 +1,28 @@
-# Bug 3 – Lógica del descuento invertida
+# Bug 4 – No valida si el producto existe
 
 ## ¿Dónde está?
-Archivo `main.py`, método `procesar_pedido()`, en el bloque que aplica el cupón.
+Archivo `main.py`, método `procesar_pedido()`, en la línea:
+
+    producto = self.inventario[id_prod]
 
 ## ¿Qué pasaba?
-El cupón `SENA2026` debía dar un **20% de descuento**, pero el código hacía:
-
-    total_pedido = total_pedido * 1.20
-
-Multiplicar por 1.20 equivale a sumar el 20% al total. El cliente que usaba
-el cupón terminaba pagando **más** que el que no lo usaba.
-
-Ejemplo: una compra de $100.000 con cupón quedaba en $120.000 en vez de $80.000.
+Si el carrito traía un `id_producto` que no está en el inventario, Python
+lanzaba un `KeyError` sin control y el programa se caía.
 
 ## ¿Por qué ocurre?
-Error de lógica: para quitar un porcentaje se multiplica por (1 - porcentaje).
-Quitar el 20% es multiplicar por 0.80, no por 1.20.
+Acceder a un diccionario con `diccionario[clave]` exige que la clave exista.
+El código confiaba en que el carrito siempre traería productos válidos, pero
+nunca lo verificaba.
 
 ## Solución
+Validar que el producto exista antes de usarlo y lanzar un error claro:
 
-    if cupon_descuento == "SENA2026":
-        total_pedido = total_pedido * 0.80   # 20% de descuento
+    if id_prod not in self.inventario:
+        raise ValueError(f"Producto {id_prod} no existe en el inventario")
+    producto = self.inventario[id_prod]
+
+Así el error es controlado y el mensaje dice exactamente qué producto falló.
 
 ## Prueba unitaria
-`test_bug3_descuento.py` verifica que una compra de $100.000 con el cupón
-devuelve $80.000.
+`test_bug4_producto_inexistente.py` verifica que al pedir un producto que no
+existe se lanza `ValueError`.
