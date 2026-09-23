@@ -1,4 +1,17 @@
 
+Explicación del Bug 2 :
+En el constructor se crea el atributo correcto:
+Pythonself.ventas_totales = 0.0   # con "l" minúscula
+Pero al registrar la venta se escribió:
+Pythonself.ventas_totaIes += total_pedido   # con "I" mayúscula
+Python distingue mayúsculas de minúsculas, así que ventas_totaIes es un nombre totalmente diferente.
+
+Como ese atributo no existía, Python lo crea en el momento y le guarda el valor.
+Resultado: el contador real (ventas_totales) nunca se actualiza y siempre se queda en 0.
+Corrección:
+Pythonself.ventas_totales += total_pedido
+
+
 # Bug 3 – Lógica del descuento invertida
 
 ## ¿Dónde está?
@@ -26,7 +39,6 @@ Quitar el 20% es multiplicar por 0.80, no por 1.20.
 ## Prueba unitaria
 `test_bug3_descuento.py` verifica que una compra de $100.000 con el cupón
 devuelve $80.000.
-=======
 
 # Bug 4 – No valida si el producto existe
 
@@ -56,7 +68,7 @@ Así el error es controlado y el mensaje dice exactamente qué producto falló.
 ## Prueba unitaria
 `test_bug4_producto_inexistente.py` verifica que al pedir un producto que no
 existe se lanza `ValueError`.
-=======
+
 # Explicación del error
 
 En el método procesar_pedido se resta directamente la cantidad solicitada del inventario sin verificar si hay suficiente stock.
@@ -65,4 +77,5 @@ Esto permite que un cliente compre más unidades de las que realmente existen. C
 - El inventario puede quedar con valores negativos.
 - Se generan ventas de productos que no existen.
 - Se rompe la integridad de los datos del sistema.
+
 
