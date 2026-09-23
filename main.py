@@ -1,8 +1,9 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
+    # BUG 1: El argumento por defecto {} es mutable y se comparte entre todas las instancias.
+    def __init__(self, inventario_inicial=None):
+        self.inventario = inventario_inicial if inventario_inicial is not None else {}
         self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
@@ -12,7 +13,7 @@ class TiendaOnline:
         else:
             self.inventario[id_producto] = {'nombre': nombre, 'precio': precio, 'cantidad': cantidad}
 
-        def procesar_pedido(self, carrito, cupon_descuento=None):
+    def procesar_pedido(self, carrito, cupon_descuento=None):
         """
         Procesa una lista de items en el carrito.
         carrito es una lista de diccionarios: [{'id_producto': 'A1', 'cantidad': 2}, ...]
@@ -36,12 +37,13 @@ class TiendaOnline:
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
-        # Aplicar descuento si el cupón es válido (20% de descuento)
-        if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
 
-        # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        # BUG 3: Se multiplicaba por 1.20 (aumento) en vez de 0.80 (descuento del 20%).
+        if cupon_descuento == "SENA2026":
+            total_pedido = total_pedido * 0.80
+
+        # BUG 2: Typo en el nombre de la variable (totaIes con I mayuscula).
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
@@ -49,9 +51,9 @@ class TiendaOnline:
         """Elimina del inventario los productos con cantidad 0 o menor."""
         
         # BUG 4: No se puede modificar un diccionario mientras se itera sobre él. Se usa list() para crear una copia.
-       for id_producto in list(self.inventario.keys()):
-         if self.inventario[id_producto]['cantidad'] <= 0:
-          del self.inventario[id_producto]
+        for id_producto in list(self.inventario.keys()):
+            if self.inventario[id_producto]['cantidad'] <= 0:
+                del self.inventario[id_producto]
 
 
 # --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) ---
