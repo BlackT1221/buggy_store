@@ -1,85 +1,151 @@
+```markdown
+# Explicación de los 6 Bugs del Sistema
 
-Explicación del Bug 2 :
-En el constructor se crea el atributo correcto:
-Pythonself.ventas_totales = 0.0   # con "l" minúscula
-Pero al registrar la venta se escribió:
-Pythonself.ventas_totaIes += total_pedido   # con "I" mayúscula
-Python distingue mayúsculas de minúsculas, así que ventas_totaIes es un nombre totalmente diferente.
+Este documento explica los 6 errores encontrados en el código original de `TiendaOnline` y cómo fueron corregidos.
 
-Como ese atributo no existía, Python lo crea en el momento y le guarda el valor.
-Resultado: el contador real (ventas_totales) nunca se actualiza y siempre se queda en 0.
-Corrección:
-Pythonself.ventas_totales += total_pedido
+---
 
+## Bug 1: Argumento Mutable por Defecto
 
-# Bug 3 – Lógica del descuento invertida
+**Código problemático:**
+```python
+def __init__(self, inventario_inicial={}):
+```
 
-## ¿Dónde está?
-Archivo `main.py`, método `procesar_pedido()`, en el bloque que aplica el cupón.
+**Problema:**  
+En Python, los valores por defecto se evalúan una sola vez. Al usar un diccionario `{}` como valor por defecto, todas las instancias de la clase que no reciben un inventario propio terminan compartiendo el mismo diccionario en memoria.
 
-## ¿Qué pasaba?
-El cupón `SENA2026` debía dar un **20% de descuento**, pero el código hacía:
+**Consecuencia:**  
+Al modificar el inventario de una tienda, también se modifica el de las demás.
 
+**Solución:**  
+Usar `None` como valor por defecto y crear un nuevo diccionario dentro del método.
+
+```python
+def __init__(self, inventario_inicial=None):
+    self.inventario = inventario_inicial if inventario_inicial is not None else {}
+```
+
+---
+
+## Bug 2: Typo en el nombre del atributo
+
+**Código problemático:**
+```python
+self.ventas_totaIes += total_pedido
+```
+
+**Problema:**  
+Se escribió `ventas_totaIes` (con “I” mayúscula) en lugar de `ventas_totales`. Esto crea un atributo nuevo y nunca actualiza el verdadero `ventas_totales`.
+
+**Consecuencia:**  
+El total de ventas siempre permanece en `0.0`.
+
+**Solución:**  
+Corregir el nombre del atributo:
+
+```python
+self.ventas_totales += total_pedido
+```
+
+---
+
+## Bug 3: Lógica del descuento invertida
+
+**Código problemático:**
+```python
+if cupon_descuento == "SENA2026":
     total_pedido = total_pedido * 1.20
+```
 
-Multiplicar por 1.20 equivale a sumar el 20% al total. El cliente que usaba
-el cupón terminaba pagando **más** que el que no lo usaba.
+**Problema:**  
+El comentario indica que se debe aplicar un 20% de descuento, pero se multiplica por `1.20`, lo que **aumenta** el precio en un 20%.
 
-Ejemplo: una compra de $100.000 con cupón quedaba en $120.000 en vez de $80.000.
+**Consecuencia:**  
+El cliente paga más en lugar de pagar menos.
 
-## ¿Por qué ocurre?
-Error de lógica: para quitar un porcentaje se multiplica por (1 - porcentaje).
-Quitar el 20% es multiplicar por 0.80, no por 1.20.
+**Solución:**  
+Multiplicar por `0.80` para aplicar correctamente el 20% de descuento.
 
-## Solución
+```python
+if cupon_descuento == "SENA2026":
+    total_pedido = total_pedido * 0.80
+```
 
-    if cupon_descuento == "SENA2026":
-        total_pedido = total_pedido * 0.80   # 20% de descuento
+---
 
-## Prueba unitaria
-`test_bug3_descuento.py` verifica que una compra de $100.000 con el cupón
-devuelve $80.000.
+## Bug 4: No valida si el producto existe
 
-# Bug 4 – No valida si el producto existe
+**Código problemático:**
+```python
+producto = self.inventario[id_prod]
+```
 
-## ¿Dónde está?
-Archivo `main.py`, método `procesar_pedido()`, en la línea:
+**Problema:**  
+Si el `id_producto` no existe en el inventario, el programa lanza un `KeyError` y se cae.
 
-    producto = self.inventario[id_prod]
+**Consecuencia:**  
+El sistema colapsa cuando se intenta comprar un producto inexistente.
 
-## ¿Qué pasaba?
-Si el carrito traía un `id_producto` que no está en el inventario, Python
-lanzaba un `KeyError` sin control y el programa se caía.
+**Solución:**  
+Validar la existencia del producto antes de usarlo.
 
-## ¿Por qué ocurre?
-Acceder a un diccionario con `diccionario[clave]` exige que la clave exista.
-El código confiaba en que el carrito siempre traería productos válidos, pero
-nunca lo verificaba.
+```python
+if id_prod not in self.inventario:
+    raise ValueError(f"Producto {id_prod} no existe en el inventario")
+```
 
-## Solución
-Validar que el producto exista antes de usarlo y lanzar un error claro:
+---
 
-    if id_prod not in self.inventario:
-        raise ValueError(f"Producto {id_prod} no existe en el inventario")
-    producto = self.inventario[id_prod]
+## Bug 5: No valida el stock disponible
 
-Así el error es controlado y el mensaje dice exactamente qué producto falló.
+**Código problemático:**
+```python
+producto['cantidad'] -= cant_comprada
+```
 
-## Prueba unitaria
-`test_bug4_producto_inexistente.py` verifica que al pedir un producto que no
-existe se lanza `ValueError`.
+**Problema:**  
+Se resta la cantidad solicitada sin verificar si hay suficiente stock.
 
-# Explicación del error
+**Consecuencia:**  
+El inventario puede quedar con valores negativos y se permiten ventas de productos que no existen.
 
-En el constructor de la clase se definió el parámetro inventario_inicial con un diccionario vacío {} como valor por defecto.
-El problema es que en Python los valores por defecto se crean una sola vez, cuando se define la función, y no cada vez que se llama. Como un diccionario es un objeto mutable, todas las instancias de TiendaOnline que no reciben un inventario propio terminan compartiendo exactamente el mismo diccionario en memoria.
-Por eso, cuando se agrega un producto a una tienda, ese producto también aparece en las demás tiendas, aunque sean objetos diferentes. Esto genera contaminación de estado entre instancias y comportamientos incorrectos e impredecibles.
+**Solución:**  
+Validar el stock antes de restar.
 
-- Contaminación de estado entre instancias.
-- Comportamientos impredecibles y difíciles de depurar.
-- Violación del principio de encapsulamiento.
-En el método procesar_pedido se resta directamente la cantidad solicitada del inventario sin verificar si hay suficiente stock.
-Esto permite que un cliente compre más unidades de las que realmente existen. Como resultado, la cantidad del producto puede quedar en negativo, lo cual no tiene sentido en un sistema de inventario real.
+```python
+if producto['cantidad'] < cant_comprada:
+    raise ValueError(f"Stock insuficiente de {id_prod}. Disponible: {producto['cantidad']}")
+```
 
-- El inventario puede quedar con valores negativos.
-- Se generan ventas de productos que no existen.
+---
+
+## Bug 6: Modificar un diccionario mientras se itera
+
+**Código problemático:**
+```python
+for id_producto in self.inventario.keys():
+    if self.inventario[id_producto]['cantidad'] <= 0:
+        del self.inventario[id_producto]
+```
+
+**Problema:**  
+No se puede eliminar elementos de un diccionario mientras se está iterando sobre él. Esto genera un `RuntimeError`.
+
+**Consecuencia:**  
+El método `limpiar_agotados` hace que el programa se caiga.
+
+**Solución:**  
+Primero recolectar los IDs a eliminar y luego borrarlos.
+
+```python
+ids_a_eliminar = [
+    id_producto for id_producto, datos in self.inventario.items()
+    if datos['cantidad'] <= 0
+]
+
+for id_producto in ids_a_eliminar:
+    del self.inventario[id_producto]
+```
+
+---
