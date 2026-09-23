@@ -41,7 +41,7 @@ class TiendaOnline:
             total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        g 
         
         return total_pedido
 
