@@ -25,16 +25,24 @@ class TiendaOnline:
 
             producto = self.inventario[id_prod]
             
+            # Validamos que haya stock suficiente
+            if producto['cantidad'] < cant_comprada:
+                raise ValueError(
+                    f"Stock insuficiente de {id_prod}. "
+                    f"Disponible: {producto['cantidad']}"
+                )
+
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+                # Registrar la venta
+        self.ventas_totales += total_pedido
         
         return total_pedido
 
