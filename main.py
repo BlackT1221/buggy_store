@@ -37,6 +37,10 @@ class TiendaOnline:
             cant_comprada = item['cantidad']
             producto = self.inventario[id_prod]
 
+            # Verificar que haya suficiente inventario
+            if cant_comprada > producto['cantidad']:
+                raise ValueError("No hay suficiente inventario")
+
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
@@ -66,7 +70,12 @@ if __name__ == "__main__":
 
     # Prueba 1: Inicialización
     tienda1 = TiendaOnline()
-    tienda1.agregar_producto("P01", "Teclado Mecánico", 150000, 5)
+    tienda1.agregar_producto(
+        "P01",
+        "Teclado Mecánico",
+        150000,
+        5
+    )
 
     tienda2 = TiendaOnline()
 
@@ -74,7 +83,12 @@ if __name__ == "__main__":
     print(f"Inventario tienda 2: {tienda2.inventario}")
 
     # Prueba 2: Procesar un pedido válido
-    tienda1.agregar_producto("P02", "Mouse Gamer", 80000, 3)
+    tienda1.agregar_producto(
+        "P02",
+        "Mouse Gamer",
+        80000,
+        3
+    )
 
     carrito = [
         {'id_producto': 'P01', 'cantidad': 2},
@@ -98,4 +112,4 @@ if __name__ == "__main__":
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
 
-    # tienda1.limpiar_agotados() # Descomentar para probar
+    tienda1.limpiar_agotados() # Descomentar para probar
