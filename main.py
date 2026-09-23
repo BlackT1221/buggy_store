@@ -1,3 +1,4 @@
+
 class TiendaOnline:
 
     # Sistema básico de gestión de inventario y ventas
@@ -25,7 +26,6 @@ class TiendaOnline:
     def procesar_pedido(self, carrito, cupon_descuento=None):
         """
         Procesa una lista de items en el carrito.
-
         carrito es una lista de diccionarios:
         [{'id_producto': 'A1', 'cantidad': 2}, ...]
         """
@@ -47,11 +47,11 @@ class TiendaOnline:
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totales += total_pedido
-
+        self.ventas_totales += total_pedido 
+        
         return total_pedido
 
     def limpiar_agotados(self):
@@ -112,4 +112,4 @@ if __name__ == "__main__":
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
 
-    # tienda1.limpiar_agotados() # Descomentar para probar
+    tienda1.limpiar_agotados() # Descomentar para probar
