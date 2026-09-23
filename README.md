@@ -1,4 +1,3 @@
-
 ```markdown
 # Explicación de los 6 Bugs del Sistema
 
@@ -150,4 +149,3 @@ for id_producto in ids_a_eliminar:
 ```
 
 ---
-
