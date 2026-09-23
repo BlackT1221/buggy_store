@@ -1,8 +1,9 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
+    # BUG 1: El argumento por defecto {} es mutable y se comparte entre todas las instancias.
+    def __init__(self, inventario_inicial=None):
+        self.inventario = inventario_inicial if inventario_inicial is not None else {}
         self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
@@ -23,29 +24,39 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+            # BUG 6: No se validaba si el producto existia en el inventario.
+            if id_prod not in self.inventario:
+                raise KeyError(f"El producto con ID {id_prod} no existe.")
+                
             producto = self.inventario[id_prod]
             
+            # BUG 5: No se validaba si había suficiente inventario antes de restar.
+            if producto['cantidad'] < cant_comprada:
+                raise ValueError(f"No hay suficiente inventario para {producto['nombre']}")
+                
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
 
-        # Aplicar descuento si el cupón es válido (20% de descuento)
+        # BUG 3: Se multiplicaba por 1.20 (aumento) en vez de 0.80 (descuento del 20%).
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
-        # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        # BUG 2: Typo en el nombre de la variable (totaIes con I mayuscula). Causaba un AttributeError.
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
     def limpiar_agotados(self):
         """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
+        
+        # BUG 4: No se puede modificar un diccionario mientras se itera sobre él. Se usa list() para crear una copia.
+        for id_producto in list(self.inventario.keys()):
             if self.inventario[id_producto]['cantidad'] <= 0:
                 del self.inventario[id_producto]
 
 
-# --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) ---
+# --- CÓDIGO DE PRUEBA (Para que los estudiantes ejecuten) 
 if __name__ == "__main__":
     print("Iniciando pruebas del sistema...")
     
