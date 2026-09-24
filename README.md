@@ -22,3 +22,7 @@ Se incorporó una estructura de control condicional (if-else) para evaluar si la
 ## Error tipográfico (Typo) en un atributo de clase
 
 Se corrigio en el constructor se inicializa self.ventas_totales con una 'l' minúscula, pero al registrar la venta se usa una 'I' Esto generará un error de tipo AttributeError al intentar procesar un pedido 
+
+## Error de modificación de diccionario durante la lectura.
+
+El programa intentaba eliminar elementos de un diccionario mientras lo estaba recorriendo, lo cual está prohibido en Python y genera un error, por lo que se convirtió el diccionario en una lista estática usando list() antes de hacer el ciclo, permitiendo borrar los productos agotados de forma segura sin romper la lectura.
