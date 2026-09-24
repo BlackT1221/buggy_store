@@ -1,8 +1,15 @@
 class TiendaOnline:
     # Sistema básico de gestión de inventario y ventas
+    #def __init__(self, inventario_inicial={}):
+    #self.inventario = inventario_inicial
     
-    def __init__(self, inventario_inicial={}):
-        self.inventario = inventario_inicial
+    # solucion del problema de inventario que no aparecia actualizado
+    def __init__(self, inventario_inicial = None):
+        if inventario_inicial is None:
+            self.inventario = {}
+        else:
+            self.inventario = inventario_inicial
+
         self.ventas_totales = 0.0
 
     def agregar_producto(self, id_producto, nombre, precio, cantidad):
@@ -25,23 +32,25 @@ class TiendaOnline:
 
             producto = self.inventario[id_prod]
             
-            # Actualizamos inventario y sumamos al total
-            producto['cantidad'] -= cant_comprada
-            total_pedido += producto['precio'] * cant_comprada
+            # Verificamos que haya suficiente cantidad antes de vender
+            if cant_comprada <= producto['cantidad']:
+                producto['cantidad'] -= cant_comprada
+                total_pedido += producto['precio'] * cant_comprada
+            else:
+                print(f"No hay stock suficiente para {producto['nombre']}.")
 
         # Aplicar descuento si el cupón es válido (20% de descuento)
         if cupon_descuento == "SENA2026":
-            total_pedido = total_pedido * 1.20
+            total_pedido = total_pedido * 0.80
 
         # Registrar la venta
-        self.ventas_totaIes += total_pedido 
+        self.ventas_totales += total_pedido 
         
         return total_pedido
 
     def limpiar_agotados(self):
-        """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
-            if self.inventario[id_producto]['cantidad'] <= 0:
+        for id_producto in list(self.inventario.keys()):
+            if self.inventario[id_producto].get('cantidad', 0) == 0:
                 del self.inventario[id_producto]
 
 
