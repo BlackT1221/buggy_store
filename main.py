@@ -49,6 +49,7 @@ class TiendaOnline:
         self.ventas_totales += total_pedido 
 
 
+
         # Registrar la venta
         # ERROR: Se escribio "ventas_totaIes" con "I" mayuscula, pero en el __init__
         # el atributo se llama "ventas_totales" con "l" minuscula. Python no encontraba
@@ -56,6 +57,7 @@ class TiendaOnline:
         # CORREGIDO: Se cambio la "I" por "l" para que coincida con el __init__
         self.ventas_totales += total_pedido 
         
+
 
 
         return total_pedido
