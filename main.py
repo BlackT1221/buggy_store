@@ -23,6 +23,13 @@ class TiendaOnline:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
 
+# ERROR: Se busca el producto directamente sin verificar si existe en el inventario.
+# Si el ID no está, Python lanza un KeyError y el sistema colapsa.
+# SOLUCIÓN: Validar primero con 'if id_prod not in self.inventario' y lanzar un ValueError controlado.
+
+            if id_prod not in self.inventario:
+                raise ValueError(f"El producto {id_prod} no existe en el inventario")
+                
             producto = self.inventario[id_prod]
 
             # --- CORRECCIÓN BUG 4: Validación de stock insuficiente ---
@@ -40,6 +47,16 @@ class TiendaOnline:
 
         # Registrar la venta (se corrigió la letra 'I' mayúscula a 'l' minúscula)
         self.ventas_totales += total_pedido 
+
+
+        # Registrar la venta
+        # ERROR: Se escribio "ventas_totaIes" con "I" mayuscula, pero en el __init__
+        # el atributo se llama "ventas_totales" con "l" minuscula. Python no encontraba
+        # el atributo y el sistema colapsaba con AttributeError.
+        # CORREGIDO: Se cambio la "I" por "l" para que coincida con el __init__
+        self.ventas_totales += total_pedido 
+        
+
 
         return total_pedido
 
