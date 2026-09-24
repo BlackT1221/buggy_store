@@ -33,7 +33,7 @@ class TiendaOnline:
             producto = self.inventario[id_prod]
             
             # Verificamos que haya suficiente cantidad antes de vender
-            if cant_comprada <= producto['cantidad']:
+            if cant_comprada > 0 and cant_comprada <= producto['cantidad']:
                 producto['cantidad'] -= cant_comprada
                 total_pedido += producto['precio'] * cant_comprada
             else:

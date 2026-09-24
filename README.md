@@ -26,3 +26,7 @@ Se corrigio en el constructor se inicializa self.ventas_totales con una 'l' min�
 ## Error de modificación de diccionario durante la lectura.
 
 El programa intentaba eliminar elementos de un diccionario mientras lo estaba recorriendo, lo cual está prohibido en Python y genera un error, por lo que se convirtió el diccionario en una lista estática usando list() antes de hacer el ciclo, permitiendo borrar los productos agotados de forma segura sin romper la lectura.
+
+## Error en la cantidad positiva
+
+El error es que solo compara la cantidad comprada contra el stock disponible, pero no revisa que la cantidad sea positiva, es decir si la cantidad es -3 y hay 5, en vez de restar se va a sumar. 
