@@ -101,4 +101,5 @@ if __name__ == "__main__":
     
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
+    
     # tienda1.limpiar_agotados() # Descomentar para probar
