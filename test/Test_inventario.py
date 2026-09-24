@@ -1,7 +1,6 @@
 from main import TiendaOnline
 def test_crear_tienda_por_defecto():
 
-    # prueba que pasa cuando no le mando argumentos
     tienda_nueva = TiendaOnline()
     
     assert tienda_nueva.inventario == {}

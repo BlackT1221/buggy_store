@@ -5,9 +5,9 @@ def test_limpiar_agotados():
     
     tienda.inventario = {
         "1": {"nombre": "Camisa", "cantidad": 10},
-        "2": {"nombre": "Pantalon", "cantidad": 0},  # Agotado (debe borrarse)
+        "2": {"nombre": "Pantalon", "cantidad": 0},  
         "3": {"nombre": "Zapatos", "cantidad": 5},
-        "4": {"nombre": "Gorra", "cantidad": 0}     # Agotado (debe borrarse)
+        "4": {"nombre": "Gorra", "cantidad": 0}     
     }
     
     tienda.limpiar_agotados()
