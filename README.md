@@ -18,7 +18,7 @@ El objetivo fue identificar, explicar, resolver y probar cada uno de los errores
 
 ---
 
-## 🐛 Bugs Encontrados y Solucionados
+##  Bugs Encontrados y Solucionados
 
 ### 🔴 Bug 1: Inventario compartido entre instancias
 - **Responsable:** Santiago Bernal
