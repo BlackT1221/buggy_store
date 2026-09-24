@@ -35,12 +35,16 @@ class TiendaOnline:
         for item in carrito:
             id_prod = item['id_producto']
             cant_comprada = item['cantidad']
-            producto = self.inventario[id_prod]
 
+            if id_prod not in self.inventario:
+                raise ValueError(f"Producto {id_prod} no encontrado en inventario.")
+            else:
+                producto = self.inventario[id_prod]
+                
             # Verificar que haya suficiente inventario
             if cant_comprada > producto['cantidad']:
                 raise ValueError("No hay suficiente inventario")
-
+            
             # Actualizamos inventario y sumamos al total
             producto['cantidad'] -= cant_comprada
             total_pedido += producto['precio'] * cant_comprada
@@ -51,7 +55,7 @@ class TiendaOnline:
 
         # Registrar la venta
         self.ventas_totales += total_pedido
-
+        
         return total_pedido
 
     def limpiar_agotados(self):
@@ -113,4 +117,4 @@ if __name__ == "__main__":
     # Prueba 4: Limpiar agotados
     tienda1.inventario["P01"]["cantidad"] = 0
 
-    tienda1.limpiar_agotados() # Descomentar para probar
+    # tienda1.limpiar_agotados() # Descomentar para probar
