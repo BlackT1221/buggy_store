@@ -49,9 +49,8 @@ class TiendaOnline:
         return total_pedido
 
     def limpiar_agotados(self):
-        """Elimina del inventario los productos con cantidad 0 o menor."""
-        for id_producto in self.inventario.keys():
-            if self.inventario[id_producto]['cantidad'] <= 0:
+        for id_producto in list(self.inventario.keys()):
+            if self.inventario[id_producto].get('cantidad', 0) == 0:
                 del self.inventario[id_producto]
 
 
